@@ -1,234 +1,388 @@
-import { useState } from 'react';
-import React ,{useEffect} from 'react'
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { useContext } from 'react';
-import cartContext from '../contextApi/cart/cartContext';
-import SpinnerPage from './SpinnerPage';
-const DetailsPage =()=>{
+
+import { useState, useEffect, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+import cartContext from "../contextApi/cart/cartContext";
+import SpinnerPage from "./SpinnerPage";
+import productsData from "../data/products.json";
+
+const DetailsPage = () => {
   const context = useContext(cartContext);
-  const {cart, setcart,loading,setloading,addtoCart,increment,decrement} = context;
-    const {id} =useParams();
-    let [products,setproducts]=useState(null);
-    let [Relevant, setRelevant]=useState([]);
-    let navigate=useNavigate()
-    // fetch product details by id
-  useEffect(()=>{
-    setloading(true)
-    let fetchbyid=async()=>{
-    // let url =`https://dummyjson.com/products/${id}`
-    let response = await fetch(`/https://dummyjson.com/products/${id}`);
-    setloading(false)
-    let data = await response.json()
-    setproducts(data)
-    console.log(data)
-    }
-    fetchbyid()
-  },[id])
-//   fetch relevant products
-  useEffect(()=>{
-   const fetchrelevant=async()=>{
-     if (!products?.category)
-        return;
-      setloading(true)
-    let url = `/https://dummyjson.com/products/category/${products.category}`
-    let response = await fetch(url);
-    setloading(false)
-    let data = await response.json();
-    let filtered = data.products.filter((item)=>{
-       return item.id!==products.id;
-    })
-    setRelevant(filtered.slice(0,6));
-   }
-   fetchrelevant();
-  },[products])
+
+  const {
+    cart,
+    loading,
+    setloading,
+    addtoCart,
+    increment,
+    decrement,
+  } = context;
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [products, setproducts] = useState(null);
+  const [Relevant, setRelevant] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
-  //  rating stars 
 
-const renderStars=(rating)=>{
-    let stars=[];
-    let rates = Math.round(rating);
-    for(let i=1;i<5;i++){
-    if(i<=rates){
-        stars.push(<p key={`star_${i}`} style={{color:'orange',
-            fontSize:'18px'}}>★</p>)
+  // Fetch product details from local JSON
+  useEffect(() => {
+    setloading(true);
+
+    try {
+      const product = productsData.find(
+        (item) => item.id === Number(id)
+      );
+
+      setproducts(product || null);
+      setSelectedImage(0);
+
+      console.log("Product:", product);
+    } catch (error) {
+      console.log("Product Error:", error.message);
+      setproducts(null);
+    } finally {
+      setloading(false);
     }
-    else{
-        stars.push(<p key={i} style={{color:'#E5E7EB'}}>★</p>)
+  }, [id, setloading]);
+
+  // Fetch relevant products from local JSON
+  useEffect(() => {
+    if (!products?.category) {
+      setRelevant([]);
+      return;
     }
-}
-return stars;
-}
-const isAdded = cart.some((item)=>{
-   return item.id === Number(id)
-})
-return(
+
+    try {
+      const filtered = productsData
+        .filter(
+          (item) =>
+            item.category === products.category &&
+            item.id !== products.id
+        )
+        .slice(0, 6);
+
+      setRelevant(filtered);
+    } catch (error) {
+      console.log("Relevant Products Error:", error.message);
+      setRelevant([]);
+    }
+  }, [products]);
+
+  // Rating stars
+  const renderStars = (rating) => {
+    const stars = [];
+    const rates = Math.round(Number(rating) || 0);
+
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <p
+          key={`star_${i}`}
+          style={{
+            color: i <= rates ? "orange" : "#E5E7EB",
+            fontSize: "18px",
+          }}
+        >
+          ★
+        </p>
+      );
+    }
+
+    return stars;
+  };
+
+  // Product not found
+  if (!loading && !products) {
+    return (
+      <div
+        style={{
+          minHeight: "50vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <p>Product not found</p>
+      </div>
+    );
+  }
+
+  const isAdded =
+    products &&
+    cart.some((item) => item.id === products.id);
+
+  return (
     <>
-    {loading && <SpinnerPage/>}
-    {!loading && products && 
-    <div className='sides'>
-    <div className='leftside'>
-    <div className='main-image'>
-        <img src={products.images?products.images[selectedImage]:''}/>
-    </div>
-    <div className='image-options'>
-        {products.images?products.images.map((image,index)=>{
-          return(<div className={
-                `image-option
-             ${index === selectedImage?'active':''}
-             `} key={index} onClick={()=>setSelectedImage(index)}>
-                <img src={image}/>
-            </div>);
-        }):''}
-    </div>
-    
-    </div>
-      <div className='rightside'>
-         <h2>{products.title}</h2>
-    <p id='dess'>{products.description}</p>
-          <div id='rating1'> 
-             {products.rating.toFixed(1)}
-             {renderStars(products.rating)}
-             </div>
-             <div className='pd'>
-    <p id='dis'>-{Math.round(products.discountPercentage)}%</p>
-    <p id='prc'>{products.price}$</p>
-    </div>
-    <p id='rp'>Return Policy:<span id='ans'>{products.returnPolicy}</span></p>
-    <p id='rp'>Shipping:<span id='ans'>{products.shippingInformation}</span></p>
-    <p id='war'>Warranty:<span id='ans'>{products.warrantyInformation}</span></p>
-    <div className='detail'>
-        <h2>Product Details</h2>
-        <table className="details-table">
-  <tbody>
-    <tr>
-      <td className="label">Available:</td>
-      <td className="value">{products.availabilityStatus}</td>
-    </tr>
-    <tr>
-      <td className="label">Brand:</td>
-      <td className="value">{products.brand}</td>
-    </tr>
-    <tr>
-      <td className="label">Category:</td>
-      <td className="value">{products.category}</td>
-    </tr>
-    <tr>
-      <td className="label">Tags:</td>
-      <td className="value">{products.tags?.[1]}</td>
-    </tr>
-    <tr>
-      <td className="label">Minimum Order Quantity:</td>
-      <td className="value">{products.minimumOrderQuantity}</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-<button type='button' id='cartbtn1' disabled={isAdded} onClick={()=>{addtoCart(products)}}>{isAdded?"Added to cart":"Add to Cart"}</button>
- <div id='qq'>
-  <p>Quantity</p>
-     <button type='button' id='inc' onClick={() => { increment(products.id) }}>+</button>
-         <p id="count">
-         {cart.find((cartitem) => cartitem.id === products.id)?.quantity || 0}
+  {loading && <SpinnerPage />}
+
+  {!loading && products && (
+    <>
+      {/* PRODUCT DETAILS */}
+      <div className="sides">
+
+        {/* LEFT SIDE */}
+        <div className="leftside">
+
+          <div className="main-image">
+            <img
+              src={products.images?.[selectedImage]}
+              alt={products.title}
+            />
+          </div>
+
+          <div className="image-options">
+            {products.images?.map((image, index) => (
+              <div
+                className={`image-option ${
+                  index === selectedImage ? "active" : ""
+                }`}
+                key={index}
+                onClick={() => setSelectedImage(index)}
+              >
+                <img
+                  src={image}
+                  alt={`${products.title} ${index + 1}`}
+                />
+              </div>
+            ))}
+          </div>
+
+        </div>
+
+
+        {/* RIGHT SIDE */}
+        <div className="rightside">
+
+          <h2>{products.title}</h2>
+
+          <p id="dess">
+            {products.description}
           </p>
-          <button type='button' id='dec' onClick={()=>{decrement(products.id)}}>-</button>
-          </div>
-        <button type='button' id='cartbtn2'>Buy Now</button>
-          <section className="reviews-section">
-        <h2>Customer Reviews</h2>
 
-        <div className="reviews-summary">
-          <div className="rating-box">
-            <h1>{products.rating.toFixed(1)}</h1>
-
-            <div className="stars">
-              {"★★★★★"}
-            </div>
-
-            <p>Based on {products.reviews.length} reviews</p>
+          <div id="rating1">
+            {Number(products.rating).toFixed(1)}
+            {renderStars(products.rating)}
           </div>
 
-          <div className="rating-message">
-            <h3>What customers are saying</h3>
-            <p>
-              See what customers think about this products.
+          <div className="pd">
+            <p id="dis">
+              -{Math.round(products.discountPercentage)}%
+            </p>
+
+            <p id="prc">
+              Rs. {Math.round(products.price).toLocaleString()}
             </p>
           </div>
+
+          <p id="rp">
+            Return Policy:
+            <span id="ans">
+              {products.returnPolicy}
+            </span>
+          </p>
+
+          <p id="rp">
+            Shipping:
+            <span id="ans">
+              {products.shippingInformation}
+            </span>
+          </p>
+
+          <p id="war">
+            Warranty:
+            <span id="ans">
+              {products.warrantyInformation}
+            </span>
+          </p>
+
+
+          {/* PRODUCT DETAILS */}
+          <div className="detail">
+
+            <h2>Product Details</h2>
+
+            <table className="details-table">
+              <tbody>
+
+                <tr>
+                  <td className="label">Available:</td>
+                  <td className="value">
+                    {products.availabilityStatus}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="label">Brand:</td>
+                  <td className="value">
+                    {products.brand}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="label">Category:</td>
+                  <td className="value">
+                    {products.category
+                      ?.split("-")
+                      .map(
+                        (word) =>
+                          word.charAt(0).toUpperCase() +
+                          word.slice(1)
+                      )
+                      .join(" ")}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="label">Tags:</td>
+                  <td className="value">
+                    {products.tags?.join(", ")}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="label">
+                    Minimum Order Quantity:
+                  </td>
+
+                  <td className="value">
+                    {products.minimumOrderQuantity}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="label">Sizes:</td>
+                  <td className="value">
+                    {products.sizes?.join(", ")}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="label">Colors:</td>
+                  <td className="value">
+                    {products.colors?.join(", ")}
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+
+          </div>
+
+
+          {/* ADD TO CART */}
+          <button
+            type="button"
+            id="cartbtn1"
+            disabled={isAdded}
+            onClick={() => addtoCart(products)}
+          >
+            {isAdded
+              ? "Added to Cart"
+              : "Add to Cart"}
+          </button>
+
+
+          {/* QUANTITY */}
+          <div id="qq">
+
+            <p>Quantity</p>
+
+            <button
+              type="button"
+              id="inc"
+              onClick={() => increment(products.id)}
+            >
+              +
+            </button>
+
+            <p id="count">
+              {cart.find(
+                (cartitem) =>
+                  cartitem.id === products.id
+              )?.quantity || 0}
+            </p>
+
+            <button
+              type="button"
+              id="dec"
+              onClick={() => decrement(products.id)}
+            >
+              -
+            </button>
+
+          </div>
+
+
+          {/* BUY NOW */}
+          <button
+            type="button"
+            id="cartbtn2"
+          >
+            Buy Now
+          </button>
+
         </div>
 
-        <div className="reviews-list">
-          {products.reviews.length > 0 ? (
-            products.reviews.map((review, index) => (
-              <div className="review-card" key={index}>
+      </div>
 
-                <div className="review-header">
-                  <div className="review-user">
-                    <div className="user-avatar">
-                      {review.reviewerName.charAt(0)}
-                    </div>
 
-                    <div>
-                      <h4>{review.reviewerName}</h4>
+      {/* RELEVANT PRODUCTS  */}
+      <div className="relevant">
 
-                      <div className="review-stars">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <span
-                            key={star}
-                            className={
-                              star <= review.rating
-                                ? "active-star"
-                                : "inactive-star"
-                            }
-                          >
-                            ★
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+        <section className="relevant-section">
 
-                  <span className="review-date">
-                    {new Date(review.date).toLocaleDateString()}
-                  </span>
-                </div>
+          <h2>You May Also Like</h2>
 
-                <p className="review-comment">
-                  {review.comment}
+          <div className="relevant-products">
+
+            {Relevant.map((item) => (
+
+              <div
+                className="relevant-card"
+                key={item.id}
+              >
+
+                <img
+                  src={item.images[0]}
+                  alt={item.title}
+                />
+
+                <h3>{item.title}</h3>
+
+                <p id="rel">
+                  Rs.{" "}
+                  {Math.round(
+                    item.price
+                  ).toLocaleString()}
                 </p>
 
-              </div>
-            ))
-          ) : (
-            <p>No reviews available for this products.</p>
-          )}
-        </div>
-      </section>
-      {loading && <SpinnerPage/>}
-      <div className='relevant'>
-                 <section className="relevant-section">
-                <h2>You May Also Like</h2>
+                <button
+                  id="view"
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      `/DetailsPage/${item.id}`
+                    )
+                  }
+                >
+                  View Product
+                </button>
 
-               <div className="relevant-products">
-          {!loading && Relevant.map((item) => (
-        <div className="relevant-card" key={item.id}>
-        <img src={item.thumbnail} alt={item.title} />
-        <h3>{item.title}</h3>
-        <p id='rel'>${item.price}</p>
-        <button id='view' type='submit'
-          onClick={() => navigate(`/DetailsPage/${item.id}`)}>
-          View Product
-          </button>
+              </div>
+
+            ))}
+
           </div>
-    ))}
-  </div>
-</section>
+
+        </section>
+
       </div>
-    
-      </div>
-      </div>
-   }
 
     </>
-)
-}
+  )}
+</>
+  );
+};
+
 export default DetailsPage;
+

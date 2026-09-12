@@ -1,13 +1,4 @@
 import React from "react";
-import {
-  ShoppingBag,
-  Truck,
-  ShieldCheck,
-  Heart,
-  ArrowRight,
-  Sparkles,
-} from "lucide-react";
-
 import { useNavigate } from "react-router-dom";
 
 const About = () => {
@@ -16,164 +7,215 @@ const About = () => {
   return (
     <main className="about-page">
 
-      {/* HERO */}
+      {/* Hero */}
       <section className="about-hero">
         <div className="about-hero-content">
-          <span className="about-tag">
-            <Sparkles size={16} />
-            MORE THAN JUST SHOPPING
-          </span>
+          <span className="about-label">ABOUT AURAMART</span>
 
           <h1>
-            Shopping Made
-            <span> Simple & Better.</span>
+            Fragrance That
+            <span> Defines You</span>
           </h1>
 
           <p>
-            We bring together quality products, trusted brands and a smooth
-            shopping experience — all in one place.
+            Discover premium fragrances carefully selected to help you
+            express your personality, mood, and unique sense of style.
+          </p>
+        </div>
+      </section>
+
+      {/* Story */}
+      <section className="about-story container">
+        <div className="about-story-image">
+          <img
+            src="/assets/slide4.jpeg"
+            alt="Premium perfume collection"
+          />
+        </div>
+
+        <div className="about-story-content">
+          <span className="about-small-title">OUR STORY</span>
+
+          <h2>
+            Your Signature Scent,
+            <br />
+            Your <span>Story</span>
+          </h2>
+
+          <p>
+            At AuraMart, we believe fragrance is more than just a scent.
+            It is an expression of identity, confidence, and memories.
+          </p>
+
+          <p>
+            Our collection brings together elegant perfumes, captivating
+            oud fragrances, refreshing body mists, and carefully curated
+            gift sets for every personality and occasion.
+          </p>
+
+          <p>
+            From timeless classics to modern compositions, we make it easy
+            to discover a fragrance that feels uniquely yours.
           </p>
 
           <button
             className="about-shop-btn"
-            onClick={() => navigate("/Shop")}
+            onClick={() => navigate("/shop")}
           >
-            Explore Products
-            <ArrowRight size={19} />
+            Explore Our Collection
           </button>
         </div>
       </section>
 
-
-      {/* ABOUT */}
-      <section className="about-story">
-        <div className="about-content">
-
-          <div className="about-left">
-            <span className="section-tag">OUR STORY</span>
-
-            <h2>
-              Everything You Love,
-              <br />
-              <span>In One Place.</span>
-            </h2>
-
-            <p>
-              Our goal is simple: make online shopping easier, more enjoyable
-              and accessible for everyone. From everyday essentials to products
-              you love, we help you discover more with ease.
-            </p>
-
-            <p>
-              We focus on quality, convenience and a seamless experience from
-              browsing to checkout.
-            </p>
-          </div>
-
-          <div className="about-stats">
-            <div className="stat-card">
-              <h3>Quality</h3>
-              <p>Products selected with care</p>
-            </div>
-
-            <div className="stat-card">
-              <h3>Simple</h3>
-              <p>An easy shopping experience</p>
-            </div>
-
-            <div className="stat-card">
-              <h3>Trusted</h3>
-              <p>Shop with confidence</p>
-            </div>
-
-            <div className="stat-card">
-              <h3>Fast</h3>
-              <p>Quick and smooth service</p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* VALUES */}
+      {/* Why AuraMart */}
       <section className="about-values">
-        <div className="values-heading">
-          <span className="section-tag">WHY CHOOSE US</span>
-          <h2>Designed For A Better Experience</h2>
+        <div className="container">
+          <div className="about-section-heading">
+            <span>WHY AURAMART</span>
+            <h2>More Than Just a Fragrance</h2>
+            <p>
+              Everything we do is inspired by quality, elegance, and the
+              experience of finding your perfect scent.
+            </p>
+          </div>
+
+          <div className="about-value-grid">
+
+            <div className="about-value-card">
+              <div className="about-icon">
+                <i className="fa-solid fa-gem"></i>
+              </div>
+
+              <h3>Premium Selection</h3>
+
+              <p>
+                Carefully selected fragrances with distinctive and
+                memorable scent profiles.
+              </p>
+            </div>
+
+            <div className="about-value-card">
+              <div className="about-icon">
+                <i className="fa-solid fa-spray-can-sparkles"></i>
+              </div>
+
+              <h3>For Every Personality</h3>
+
+              <p>
+                From bold oud to soft florals, discover scents designed
+                for different moods and personalities.
+              </p>
+            </div>
+
+            <div className="about-value-card">
+              <div className="about-icon">
+                <i className="fa-solid fa-heart"></i>
+              </div>
+
+              <h3>Chosen With Care</h3>
+
+              <p>
+                We focus on creating a beautiful fragrance-shopping
+                experience from discovery to delivery.
+              </p>
+            </div>
+
+            <div className="about-value-card">
+              <div className="about-icon">
+                <i className="fa-solid fa-truck-fast"></i>
+              </div>
+
+              <h3>Fast & Secure</h3>
+
+              <p>
+                Enjoy a smooth shopping experience with secure payment
+                and reliable delivery.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="about-categories container">
+
+        <div className="about-section-heading">
+          <span>DISCOVER YOUR SCENT</span>
+          <h2>Something For Everyone</h2>
+          <p>
+            Explore our fragrance collections and find the scent that
+            matches your style.
+          </p>
         </div>
 
-        <div className="value-grid">
+        <div className="about-category-grid">
 
-          <div className="value-card">
-            <div className="value-icon">
-              <ShoppingBag size={27} />
+          <div
+            className="about-category-card"
+            onClick={() => navigate("/category/men")}
+          >
+            <div className="about-category-overlay">
+              <span>01</span>
+              <h3>Men's Perfumes</h3>
+              <p>Bold. Confident. Distinctive.</p>
             </div>
-
-            <h3>Easy Shopping</h3>
-            <p>
-              Browse products, explore categories and find what you need
-              without the hassle.
-            </p>
           </div>
 
-          <div className="value-card">
-            <div className="value-icon">
-              <ShieldCheck size={27} />
+          <div
+            className="about-category-card"
+            onClick={() => navigate("/category/women")}
+          >
+            <div className="about-category-overlay">
+              <span>02</span>
+              <h3>Women's Perfumes</h3>
+              <p>Elegant. Soft. Captivating.</p>
             </div>
-
-            <h3>Quality First</h3>
-            <p>
-              We focus on providing a reliable experience and products worth
-              discovering.
-            </p>
           </div>
 
-          <div className="value-card">
-            <div className="value-icon">
-              <Truck size={27} />
+          <div
+            className="about-category-card"
+            onClick={() => navigate("/category/unisex")}
+          >
+            <div className="about-category-overlay">
+              <span>03</span>
+              <h3>Unisex Fragrances</h3>
+              <p>Modern. Versatile. Timeless.</p>
             </div>
-
-            <h3>Convenient Experience</h3>
-            <p>
-              From browsing to your cart, everything is designed to feel
-              simple and smooth.
-            </p>
           </div>
 
-          <div className="value-card">
-            <div className="value-icon">
-              <Heart size={27} />
+          <div
+            className="about-category-card"
+            onClick={() => navigate("/category/oud")}
+          >
+            <div className="about-category-overlay">
+              <span>04</span>
+              <h3>Oud Collection</h3>
+              <p>Rich. Warm. Luxurious.</p>
             </div>
-
-            <h3>Made For You</h3>
-            <p>
-              Discover products across different categories and shop what you
-              love.
-            </p>
           </div>
 
         </div>
       </section>
-
 
       {/* CTA */}
       <section className="about-cta">
-        <div>
-          <span className="section-tag">START EXPLORING</span>
-          <h2>Find Something You'll Love.</h2>
+        <div className="about-cta-content">
+          <span>FIND YOUR SIGNATURE SCENT</span>
+
+          <h2>
+            Let Your Fragrance
+            <br />
+            <strong>Speak For You.</strong>
+          </h2>
 
           <p>
-            Discover products across multiple categories and enjoy shopping
-            your way.
+            Explore AuraMart's collection and discover a scent made
+            for your story.
           </p>
 
-          <button
-            className="about-shop-btn light-btn"
-            onClick={() => navigate("/Shop")}
-          >
+          <button onClick={() => navigate("/shop")}>
             Shop Now
-            <ArrowRight size={19} />
           </button>
         </div>
       </section>

@@ -1,15 +1,20 @@
 
 import { useState, useEffect, useContext } from "react";
-import { Filter } from "lucide-react";
+
 import { Tags } from "lucide-react";
+
 import SpinnerPage from "./SpinnerPage";
+
 import { useNavigate } from "react-router-dom";
+
 import cartContext from "../contextApi/cart/cartContext";
-import { Menu, X } from 'lucide-react';
+import productsData from "../data/products.json";
 
 const Shop = () => {
   const navigate = useNavigate();
+
   const context = useContext(cartContext);
+
   const {
     cart,
     increment,
@@ -19,43 +24,29 @@ const Shop = () => {
     setloading,
     addtoCart,
   } = context;
+
   const [products, setproducts] = useState([]);
   const [categories, setcategories] = useState([]);
   const [selected, setSelected] = useState("");
-   const [isOpen, setIsOpen] = useState(false);
- const toggleFilter = () => {
-        setIsOpen((prev) => !prev);
-    };
-  // ALL PRODUCTS FETCH
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleFilter = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  // ALL PRODUCTS FROM LOCAL JSON
   useEffect(() => {
-    const fetchshop = async () => {
-      try {
-        setloading(true);
+    setloading(true);
 
-        const data = await fetch("/https://dummyjson.com/products");
-
-        if (!data.ok) {
-          throw new Error(`Products Error: ${data.status}`);
-        }
-
-        const response = await data.json();
-
-        setproducts(
-          Array.isArray(response.products)
-            ? response.products
-            : []
-        );
-
-      } catch (error) {
-        console.error(error.message);
-        setproducts([]);
-      } finally {
-        setloading(false);
-      }
-    };
-
-    fetchshop();
-  }, []);
+    try {
+      setproducts(Array.isArray(productsData) ? productsData : []);
+    } catch (error) {
+      console.error("Products Error:", error);
+      setproducts([]);
+    } finally {
+      setloading(false);
+    }
+  }, [setloading]);
 
   // NAVIGATE CATEGORY
   useEffect(() => {
@@ -64,39 +55,33 @@ const Shop = () => {
     }
   }, [selected, navigate]);
 
-  // ALL CATEGORIES FETCH
+  // ALL CATEGORIES FROM LOCAL JSON
   useEffect(() => {
-    const fetchcategory = async () => {
-      try {
-        const data = await fetch("/https://dummyjson.com/products/categories");
+    const uniqueCategories = [
+      ...new Map(
+        productsData.map((item) => [
+          item.category,
+          {
+            slug: item.category,
+            name: item.category
+              .split("-")
+              .map(
+                (word) =>
+                  word.charAt(0).toUpperCase() + word.slice(1)
+              )
+              .join(" "),
+          },
+        ])
+      ).values(),
+    ];
 
-        if (!data.ok) {
-          throw new Error(`Categories Error: ${data.status}`);
-        }
-
-        const response = await data.json();
-
-        console.log("Categories response:", response);
-
-        setcategories(
-          Array.isArray(response)
-            ? response.slice(0,15)
-            : []
-        );
-
-      } catch (error) {
-        console.error(error.message);
-        setcategories([]);
-      }
-    };
-
-    fetchcategory();
+    setcategories(uniqueCategories);
   }, []);
 
   // RENDER STARS
   const renderStars = (rating) => {
     const stars = [];
-    const rates = Math.round(rating);
+    const rates = Math.round(Number(rating) || 0);
 
     for (let i = 1; i <= 5; i++) {
       stars.push(
@@ -111,26 +96,37 @@ const Shop = () => {
         </p>
       );
     }
+
     return stars;
   };
 
   return (
     <>
-    <div>
-      <h1 style={{textAlign:'center',marginTop:'30px'}} id='shopshop'>Explore Our Collection</h1>
-      <button className="cat-toggle-btn" onClick={toggleFilter}>
-    <Tags size={20} />
-</button>
+      <div>
+        <h1
+          style={{
+            textAlign: "center",
+            marginTop: "30px",
+          }}
+          id="shopshop"
+        >
+          Explore Our Collection
+        </h1>
 
-    </div>
+        <button className="cat-toggle-btn" onClick={toggleFilter}>
+          <Tags size={20} />
+        </button>
+      </div>
+
       {loading ? (
         <SpinnerPage />
       ) : (
-
         <div className="shop-container">
-        
-          <div className={`shop-filters ${isOpen ? 'active' : ''}`}>
+
+          {/* FILTERS */}
+          <div className={`shop-filters ${isOpen ? "active" : ""}`}>
             <h3>Categories</h3>
+
             {Array.isArray(categories) &&
               categories.map((category) => (
                 <div id="shopBrand" key={category.slug}>
@@ -144,10 +140,13 @@ const Shop = () => {
                         : setSelected("")
                     }
                   />
+
                   <p>{category.name}</p>
                 </div>
               ))}
           </div>
+
+          {/* PRODUCTS */}
           <div className="shopp">
             {products.map((item) => {
               const isAdded = cart.some(
@@ -188,9 +187,7 @@ const Shop = () => {
                       disabled={isAdded}
                       onClick={() => addtoCart(item)}
                     >
-                      {isAdded
-                        ? "Added to Cart"
-                        : "Add to Cart"}
+                      {isAdded ? "Added to Cart" : "Add to Cart"}
                     </button>
                   </div>
 
@@ -205,8 +202,7 @@ const Shop = () => {
 
                     <p id="count">
                       {cart.find(
-                        (cartitem) =>
-                          cartitem.id === item.id
+                        (cartitem) => cartitem.id === item.id
                       )?.quantity || 0}
                     </p>
 
@@ -226,12 +222,10 @@ const Shop = () => {
                   >
                     Remove
                   </button>
-
                 </div>
               );
             })}
           </div>
-
         </div>
       )}
     </>
@@ -239,3 +233,4 @@ const Shop = () => {
 };
 
 export default Shop;
+
