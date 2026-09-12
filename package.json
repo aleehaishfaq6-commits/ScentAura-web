@@ -1,5 +1,5 @@
 {
-  "homepage": "https://aleehaishfaq6-commits.github.io/AuraMart",
+  "homepage": "https://aleehaishfaq6-commits.github.io/React-web-ScentAura",
   "name": "e-commerce-store",
   "private": true,
   "version": "0.0.0",
@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+  "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "lucide-react": "^1.40.0",

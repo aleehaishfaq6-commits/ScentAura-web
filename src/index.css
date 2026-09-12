@@ -1403,28 +1403,26 @@ input[type="checkbox"] {
 /* ---------- Category Images ---------- */
 
 #box1 {
-  background-image: url("../assets/mens.jpeg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 #box2 {
-  background-image: url("../assets/women.jpeg");
+  background-image: url("../assets/slide2.jpeg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 #box3 {
-  background-image: url("../assets/uni.jpeg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 #box4 {
-  background-image: url("../assets/oud.jpeg");
+  background-image: url("../assets/slide1.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

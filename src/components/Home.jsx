@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 import slide2 from "/assets/slide2.jpeg";
 import slide3 from "/assets/slide3.jpeg";
 import slide4 from "/assets/slide4.jpeg";
-
+import slide1 from "/assets/slide1.jpg";
 import SpecialOffer from "./Specialoffer";
+import unisex from "/assets/uni.jpeg";
+import mens from "/assets/mens.jpeg";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -100,7 +102,7 @@ const Home = () => {
           <div className="boxes">
 
             {/* MEN'S PERFUMES */}
-            <div
+            <div style={{backgroundImage:`url(${mens})`}}
               className="box"
               id="box1"
               onClick={() =>
@@ -127,6 +129,7 @@ const Home = () => {
 
             {/* UNISEX FRAGRANCES */}
             <div
+              style={{backgroundImage:`url(${unisex})`}}
               className="box"
               id="box3"
               onClick={() =>

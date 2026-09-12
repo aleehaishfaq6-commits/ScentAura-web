@@ -1,6 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import slide2 from "/assets/slide2.jpeg";
+import slide3 from "/assets/slide3.jpeg";
+import slide4 from "/assets/slide4.jpeg";
+import slide1 from "/assets/slide1.jpg";
+import unisex from "/assets/uni.avif";
+import mens from "/assets/mens.avif";
 const About = () => {
   const navigate = useNavigate();
 
@@ -10,7 +15,7 @@ const About = () => {
       {/* Hero */}
       <section className="about-hero">
         <div className="about-hero-content">
-          <span className="about-label">ABOUT AURAMART</span>
+          <span className="about-label">ABOUT SCENTAURA</span>
 
           <h1>
             Fragrance That
@@ -28,7 +33,7 @@ const About = () => {
       <section className="about-story container">
         <div className="about-story-image">
           <img
-            src="/assets/slide4.jpeg"
+            src={slide4}
             alt="Premium perfume collection"
           />
         </div>
@@ -152,6 +157,7 @@ const About = () => {
         <div className="about-category-grid">
 
           <div
+          style={{backgroundImage:`url(${slide1})`}}
             className="about-category-card"
             onClick={() => navigate("/category/men")}
           >
@@ -163,6 +169,7 @@ const About = () => {
           </div>
 
           <div
+          style={{backgroundImage:`url(${slide2})`}}
             className="about-category-card"
             onClick={() => navigate("/category/women")}
           >
@@ -174,6 +181,7 @@ const About = () => {
           </div>
 
           <div
+          style={{backgroundImage:`url(${unisex})`}}
             className="about-category-card"
             onClick={() => navigate("/category/unisex")}
           >
@@ -185,6 +193,7 @@ const About = () => {
           </div>
 
           <div
+          style={{backgroundImage:`url(${mens})`}}
             className="about-category-card"
             onClick={() => navigate("/category/oud")}
           >
