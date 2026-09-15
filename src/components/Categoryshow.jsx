@@ -135,7 +135,7 @@ const Categoryshow = () => {
       <div className="body">
 
         {/* CATEGORY HEADING */}
-        <h1 id="head">{capitalize(cleanedCatName)}</h1>
+        <h1 id="head">{capitalize(cleanedCatName)} Collection</h1>
 
         {/* MOBILE FILTER BUTTON */}
         <button

@@ -54,7 +54,7 @@ const Home = () => {
           <h1>
             Discover Your Signature
             <br />
-            Scent With AuraMart
+            Fragrance With ScentAura
           </h1>
 
           <p className="des">
@@ -116,6 +116,7 @@ const Home = () => {
 
             {/* WOMEN'S PERFUMES */}
             <div
+             style={{backgroundImage:`url(${slide2})`}}
               className="box"
               id="box2"
               onClick={() =>
@@ -143,6 +144,7 @@ const Home = () => {
 
             {/* OUD COLLECTION */}
             <div
+             style={{backgroundImage:`url(${slide1})`}}
               className="box"
               id="box4"
               onClick={() =>
