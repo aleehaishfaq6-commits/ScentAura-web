@@ -115,16 +115,14 @@ const Footer = () => {
               <p className="copyright-text">
                 &copy; 2026 ScentAura. All rights reserved.
               </p>
-
               <a
-                href="https://github.com/aleehaishfaq6-commits/AuraMart"
+                href="https://github.com/aleehaishfaq6-commits/ScentAura-web"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="developer-watermark"
               >
                 Designed & Developed by <strong>Aleeha Ishfaq</strong>
               </a>
-
               <div className="social-links">
 
                 <a href="#" aria-label="Facebook" className="social-icon">
